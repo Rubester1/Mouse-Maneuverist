@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://084hnht8tks"]
+
+[ext_resource type="Texture2D" uid="uid://b0tbft48sbv8f" path="res://Textures/Life.png" id="1_mpybf"]
+[ext_resource type="Script" uid="uid://c27fau7a6i6nu" path="res://Objects/checkbox.gd" id="1_w1iyu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+size = Vector2(175, 175)
+
+[node name="Life" type="Area2D" unique_id=819062144 groups=["life"]]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_w1iyu")
+
+[node name="Life" type="Sprite2D" parent="." unique_id=599728893]
+texture = ExtResource("1_mpybf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1550705847]
+shape = SubResource("RectangleShape2D_g4v7s")

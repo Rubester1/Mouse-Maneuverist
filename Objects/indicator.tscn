@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://51sgjuidi4os"]
+
+[ext_resource type="Texture2D" uid="uid://bl6d5qvvn5426" path="res://Textures/Blank.png" id="1_rnh6k"]
+[ext_resource type="Script" uid="uid://x2r2nvt3sbyg" path="res://indicator.gd" id="2_rf5su"]
+
+[node name="Indicator" type="Sprite2D" unique_id=1413725024]
+texture = ExtResource("1_rnh6k")
+script = ExtResource("2_rf5su")

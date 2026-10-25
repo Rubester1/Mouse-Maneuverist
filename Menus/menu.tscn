@@ -1,0 +1,413 @@
+[gd_scene format=3 uid="uid://c20s0jkeybmr7"]
+
+[ext_resource type="Script" uid="uid://c5rv84rlvqb54" path="res://Menus/menu.gd" id="1_tc4cd"]
+[ext_resource type="Texture2D" uid="uid://c7s3sylmx0vtm" path="res://Backgrounds/BackgroundFaded.png" id="2_f371u"]
+[ext_resource type="Script" uid="uid://b2o568boeejn7" path="res://Menus/background.gd" id="3_jvnec"]
+[ext_resource type="FontFile" uid="uid://ci6fmn3fuqyny" path="res://Textures/LilitaOne-Regular.ttf" id="4_jvnec"]
+
+[node name="Menu" type="Control" unique_id=676153736]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -576.0
+offset_top = -324.0
+offset_right = -576.0
+offset_bottom = -324.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tc4cd")
+
+[node name="Background" type="TextureRect" parent="." unique_id=762706307]
+layout_mode = 0
+offset_right = 1352.0
+offset_bottom = 648.0
+texture = ExtResource("2_f371u")
+stretch_mode = 1
+script = ExtResource("3_jvnec")
+
+[node name="Main Menu" type="Control" parent="." unique_id=1434625969]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Title" type="Label" parent="Main Menu" unique_id=2053358246]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 191.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 48
+text = "Mouse Maneuverist"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="PlayGame" type="Button" parent="Main Menu" unique_id=1425786293]
+layout_mode = 0
+offset_left = 333.0
+offset_top = 280.0
+offset_right = 819.0
+offset_bottom = 385.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 32
+text = "Play"
+
+[node name="Settings" type="Button" parent="Main Menu" unique_id=1589725800]
+layout_mode = 0
+offset_left = 333.0
+offset_top = 411.0
+offset_right = 819.0
+offset_bottom = 516.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 32
+text = "Settings"
+
+[node name="Song Select" type="Control" parent="." unique_id=2089809954]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Title" type="Label" parent="Song Select" unique_id=1855392106]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 191.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 48
+text = "Song Select"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="BackMenu" type="Button" parent="Song Select" unique_id=1791377856]
+layout_mode = 0
+offset_left = 535.0
+offset_top = 447.0
+offset_right = 617.0
+offset_bottom = 500.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 32
+text = "Back"
+
+[node name="Highscore" type="Label" parent="Song Select" unique_id=1495549504]
+layout_mode = 0
+offset_top = 85.0
+offset_right = 1152.0
+offset_bottom = 276.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 20
+text = "Highscore - Panda Eyes"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="???" type="Label" parent="Song Select" unique_id=655186671]
+layout_mode = 0
+offset_left = 310.0
+offset_top = 85.0
+offset_right = 1462.0
+offset_bottom = 276.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 20
+text = "???"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Octane" type="Label" parent="Song Select" unique_id=212609989]
+layout_mode = 0
+offset_left = -310.0
+offset_top = 85.0
+offset_right = 842.0
+offset_bottom = 276.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 20
+text = "Octane - Creo"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Highscore2" type="Button" parent="Song Select" unique_id=603368172]
+layout_mode = 0
+offset_left = 489.0
+offset_top = 295.0
+offset_right = 663.0
+offset_bottom = 372.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 24
+text = "Unavailable"
+
+[node name="Octane2" type="Button" parent="Song Select" unique_id=79790468]
+layout_mode = 0
+offset_left = 179.0
+offset_top = 295.0
+offset_right = 353.0
+offset_bottom = 372.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 24
+text = "Play"
+
+[node name="???2" type="Button" parent="Song Select" unique_id=977414454]
+layout_mode = 0
+offset_left = 799.0
+offset_top = 295.0
+offset_right = 973.0
+offset_bottom = 372.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 24
+text = "Unavailable"
+
+[node name="Settings" type="Control" parent="." unique_id=609555859]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BackMenu" type="Button" parent="Settings" unique_id=1105185332]
+layout_mode = 0
+offset_left = 535.0
+offset_top = 447.0
+offset_right = 617.0
+offset_bottom = 500.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 32
+text = "Back"
+
+[node name="Title" type="Label" parent="Settings" unique_id=648960938]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 191.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 48
+text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Volume" type="HSlider" parent="Settings" unique_id=295778853]
+layout_mode = 0
+offset_left = 268.0
+offset_top = 316.0
+offset_right = 884.0
+offset_bottom = 332.0
+max_value = 1.0
+step = 0.001
+value = 0.5
+
+[node name="Label2" type="Label" parent="Settings" unique_id=119082950]
+layout_mode = 0
+offset_top = 128.0
+offset_right = 1152.0
+offset_bottom = 319.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 20
+text = "Volume"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Song Config" type="Control" parent="." unique_id=1310885399]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BackSong" type="Button" parent="Song Config" unique_id=145335579]
+layout_mode = 0
+offset_left = 535.0
+offset_top = 487.0
+offset_right = 617.0
+offset_bottom = 540.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 32
+text = "Back"
+
+[node name="Song Info" type="Label" parent="Song Config" unique_id=39588540]
+layout_mode = 0
+offset_top = 100.0
+offset_right = 1152.0
+offset_bottom = 291.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 20
+text = "Song Info"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Info" type="Label" parent="Song Config/Song Info" unique_id=431884613]
+layout_mode = 0
+offset_left = 452.0
+offset_top = 213.0
+offset_right = 700.0
+offset_bottom = 348.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 20
+text = "My point highscore: ~50,000
+Amount of notes: 361
+Max points: I'm not even sure"
+
+[node name="Song Settings" type="Label" parent="Song Config" unique_id=1578774321]
+layout_mode = 0
+offset_left = -310.0
+offset_top = 100.0
+offset_right = 842.0
+offset_bottom = 291.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 20
+text = "Song Settings"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Info" type="Label" parent="Song Config/Song Settings" unique_id=1431522086]
+layout_mode = 0
+offset_left = 452.0
+offset_top = 213.0
+offset_right = 700.0
+offset_bottom = 348.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 20
+text = "Infinite lives:
+(For practice purposes)
+"
+
+[node name="Song Name" type="Label" parent="Song Config" unique_id=950336675]
+layout_mode = 0
+offset_top = 20.0
+offset_right = 1152.0
+offset_bottom = 211.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 28
+text = "Octane - Creo"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Title" type="Label" parent="Song Config" unique_id=1160700977]
+layout_mode = 0
+offset_top = -20.0
+offset_right = 1152.0
+offset_bottom = 171.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 48
+text = "Song Configuration"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="PlaySong" type="Button" parent="Song Config" unique_id=1474664377]
+layout_mode = 0
+offset_left = 771.0
+offset_top = 312.0
+offset_right = 1001.0
+offset_bottom = 454.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 24
+text = "Play
+"
+
+[node name="InfiniteLives" type="CheckButton" parent="Song Config" unique_id=782020389]
+layout_mode = 0
+offset_left = 277.0
+offset_top = 317.0
+offset_right = 321.0
+offset_bottom = 341.0
+
+[node name="PauseMenu" type="Control" parent="." unique_id=984648119]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="PauseMenu" unique_id=1594370498]
+layout_mode = 0
+offset_left = 382.0
+offset_top = 210.0
+offset_right = 770.0
+offset_bottom = 438.0
+color = Color(0, 0, 0, 0.4392157)
+
+[node name="Title" type="Label" parent="PauseMenu" unique_id=2036480303]
+layout_mode = 0
+offset_top = 109.0
+offset_right = 1152.0
+offset_bottom = 300.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 48
+text = "Paused"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Resume" type="Button" parent="PauseMenu" unique_id=1420282095]
+layout_mode = 0
+offset_left = 521.0
+offset_top = 329.0
+offset_right = 631.0
+offset_bottom = 393.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 24
+text = "Resume"
+
+[node name="Game Over" type="Control" parent="." unique_id=892725683]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="Game Over" unique_id=1115283344]
+layout_mode = 0
+offset_left = 382.0
+offset_top = 210.0
+offset_right = 770.0
+offset_bottom = 438.0
+color = Color(0, 0, 0, 0.4392157)
+
+[node name="Game Over" type="Label" parent="Game Over" unique_id=532366577]
+layout_mode = 0
+offset_top = 109.0
+offset_right = 1152.0
+offset_bottom = 300.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 48
+text = "Game Over"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="You Win" type="Label" parent="Game Over" unique_id=237564377]
+visible = false
+layout_mode = 0
+offset_top = 109.0
+offset_right = 1152.0
+offset_bottom = 300.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 48
+text = "You Win!!"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="Game Over" unique_id=90420973]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+
+[node name="BackMenu" type="Button" parent="Game Over" unique_id=728586324]
+layout_mode = 0
+offset_left = 457.0
+offset_top = 348.0
+offset_right = 695.0
+offset_bottom = 412.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 24
+text = "Return to Menu"
+
+[node name="PointsGameOver" type="Label" parent="Game Over" unique_id=928417467]
+layout_mode = 0
+offset_top = 145.0
+offset_right = 1152.0
+offset_bottom = 336.0
+theme_override_fonts/font = ExtResource("4_jvnec")
+theme_override_font_sizes/font_size = 20
+text = "1 Point"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[connection signal="pressed" from="Main Menu/PlayGame" to="." method="_on_play_game_pressed"]
+[connection signal="pressed" from="Main Menu/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="Song Select/BackMenu" to="." method="_on_back_menu_pressed"]
+[connection signal="pressed" from="Song Select/Octane2" to="." method="_on_octane_pressed"]
+[connection signal="pressed" from="Settings/BackMenu" to="." method="_on_back_menu_pressed"]
+[connection signal="value_changed" from="Settings/Volume" to="." method="_on_volume_value_changed"]
+[connection signal="pressed" from="Song Config/BackSong" to="." method="_on_back_song_pressed"]
+[connection signal="pressed" from="Song Config/PlaySong" to="." method="_on_play_song_pressed"]
+[connection signal="toggled" from="Song Config/InfiniteLives" to="." method="_on_infinite_lives_toggled"]
+[connection signal="pressed" from="PauseMenu/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Game Over/BackMenu" to="." method="_on_back_menu_pressed"]

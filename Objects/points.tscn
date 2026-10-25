@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://8t5b13kxo4hm"]
+
+[ext_resource type="Script" uid="uid://c27fau7a6i6nu" path="res://Objects/checkbox.gd" id="1_2gx6j"]
+[ext_resource type="Texture2D" uid="uid://d3f3qpsbt8nfc" path="res://Textures/Points.png" id="1_a8pvh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+size = Vector2(175, 175)
+
+[node name="Points" type="Area2D" unique_id=537709775 groups=["points"]]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_2gx6j")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=648511067]
+shape = SubResource("RectangleShape2D_g4v7s")
+
+[node name="Points" type="Sprite2D" parent="." unique_id=1290572336]
+texture = ExtResource("1_a8pvh")

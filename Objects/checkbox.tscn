@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://cwskp1ouraciw"]
+
+[ext_resource type="Script" uid="uid://c27fau7a6i6nu" path="res://Objects/checkbox.gd" id="1_bq0qa"]
+[ext_resource type="Texture2D" uid="uid://dnqim4d2mc03b" path="res://Textures/Checkmark.png" id="2_22neb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fcnqv"]
+size = Vector2(175, 175)
+
+[node name="Checkbox" type="Area2D" unique_id=920743801 groups=["check"]]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_bq0qa")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1964358889]
+shape = SubResource("RectangleShape2D_fcnqv")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1809379233]
+texture = ExtResource("2_22neb")
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

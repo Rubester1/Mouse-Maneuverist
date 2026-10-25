@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bd6b0k37f5v6e"]
+
+[ext_resource type="Texture2D" uid="uid://d0efqkwijclss" path="res://Textures/outerglowLife.png" id="1_hg0dn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+size = Vector2(175, 175)
+
+[node name="Inner Glow Life" type="Area2D" unique_id=1585763404 groups=["inner", "life"]]
+scale = Vector2(0.5, 0.5)
+
+[node name="OuterglowLife" type="Sprite2D" parent="." unique_id=1607179712]
+texture = ExtResource("1_hg0dn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1127996650]
+shape = SubResource("RectangleShape2D_g4v7s")

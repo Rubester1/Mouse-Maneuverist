@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bycy42xe27qhx"]
+
+[ext_resource type="Texture2D" uid="uid://c5v6r45t35lxk" path="res://Textures/outerglowPoints.png" id="1_mmoff"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+size = Vector2(175, 175)
+
+[node name="Inner Glow Points" type="Area2D" unique_id=1712278089 groups=["inner", "points"]]
+scale = Vector2(0.5, 0.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1679532372]
+shape = SubResource("RectangleShape2D_g4v7s")
+
+[node name="OuterglowPoints" type="Sprite2D" parent="." unique_id=1637325508]
+texture = ExtResource("1_mmoff")

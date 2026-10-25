@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://bly3r70h4h7wi"]
+
+[ext_resource type="Script" uid="uid://c27fau7a6i6nu" path="res://Objects/checkbox.gd" id="1_415e0"]
+[ext_resource type="Texture2D" uid="uid://hp7xtaw4cc0f" path="res://Textures/outerglowCheckmark.png" id="2_6ib02"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+size = Vector2(175, 175)
+
+[node name="Inner Glow Checkbox" type="Area2D" unique_id=1532603278 groups=["check", "inner"]]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_415e0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1538589489]
+shape = SubResource("RectangleShape2D_g4v7s")
+
+[node name="OuterglowCheckmark" type="Sprite2D" parent="." unique_id=1406903479]
+texture = ExtResource("2_6ib02")

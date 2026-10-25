@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dx7w7r00lanri"]
+
+[ext_resource type="Script" uid="uid://chtx5n846fyc4" path="res://Objects/xbox.gd" id="1_dkqla"]
+[ext_resource type="Texture2D" uid="uid://cm5vxt3g5osuw" path="res://Textures/X.png" id="2_2qqcj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+size = Vector2(175, 175)
+
+[node name="Xbox" type="Area2D" unique_id=1478298817 groups=["x"]]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_dkqla")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=866342339]
+shape = SubResource("RectangleShape2D_g4v7s")
+
+[node name="X" type="Sprite2D" parent="." unique_id=1700442788]
+texture = ExtResource("2_2qqcj")
