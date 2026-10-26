@@ -7,6 +7,7 @@ extends Area2D
 func _ready() -> void:
 	mouse_entered.connect(func(): is_mouse_hovering = true)
 	mouse_exited.connect(func(): is_mouse_hovering = false)
+	top_level = true
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:

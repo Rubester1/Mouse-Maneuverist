@@ -27,6 +27,7 @@ extends Node2D
 @onready var barsanimation = $Menu/Bars/AnimationPlayer
 @export var barsstate: bool = false
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$"UI/CanvasLayer".visible = false
