@@ -23,6 +23,8 @@ func _on_back_menu_pressed() -> void:
 	$"Song Select".visible = false
 	$"Settings".visible = false
 	$"Game Over".visible = false
+	$MainBG.visible = true
+	$GameBG.visible = false
 
 func _on_octane_pressed() -> void:
 	$"Song Select".visible = false
@@ -34,6 +36,8 @@ func _on_back_song_pressed() -> void:
 
 func _on_play_song_pressed() -> void:
 	$"Song Config".visible = false
+	$MainBG.visible = false
+	$GameBG.visible = true
 	get_parent().visible = true
 	get_parent().start_song("Octane", infinitelives)
 

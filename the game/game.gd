@@ -24,6 +24,9 @@ extends Node2D
 @export var currentsong = "None"
 @export var songposition = 0.0
 
+@onready var barsanimation = $Menu/Bars/AnimationPlayer
+@export var barsstate: bool = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$"UI/CanvasLayer".visible = false
@@ -48,6 +51,14 @@ func editlives(value):
 		combo = 1
 	lives += value
 	print(lives)
+
+func bars(havebars: bool):
+	barsstate = havebars
+	if barsstate == true:
+		barsanimation.play("enter")
+	else:
+		barsanimation.play_backwards("enter")
+
 
 func summon(type, pos, time):
 	notes -= 1
@@ -87,6 +98,8 @@ func summon(type, pos, time):
 			say("Nice.")
 #hackatime isn't working oh my goodness me oh my...hackatime why would you do this to me... HACKATIME YOU ARENT TRACKING MY HOURS BRO WHYWHYWHYWHYHWHWYHWYWYHWYHWYHWYHWYHWYHWYHWYHWYHWYHYWHYWYWHYWYHHYWYWWHYWHYWHWYHWHYWHYWHYWHYWHYWHYWYHWYWHHWYHWYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 func gameover(win: bool):
+	if barsstate == true:
+		barsanimation.play_backwards("enter")
 	$"Menu/Game Over".visible = true
 	if win:
 		$"Menu/Game Over/Game Over".visible = false
@@ -132,9 +145,10 @@ func start_song(song, infinitelives):
 		MusicPlayer.stream = load("res://Music/Creo Octane.mp3")
 		MusicPlayer.play(0.0)
 		currentsong = "Octane"
+		points = 0
 		notes = 361
 		
-		$Menu/Background.start_song("Octane")
+		#$Menu/Background.start_song("Octane")
 		
 		await get_tree().create_timer(3.0).timeout
 		
@@ -379,7 +393,7 @@ func start_song(song, infinitelives):
 			return
 		
 		#darken background
-		
+		bars(true)
 		
 		summon(innerglowcheckbox, Vector2(200,200), 2)
 		await get_tree().create_timer(0.2).timeout
@@ -794,6 +808,8 @@ func start_song(song, infinitelives):
 		if lives < 1:
 			gameover(false)
 			return
+		
+		bars(false)
 		
 		summon(checkbox, Vector2(0,-100), 1.5)
 		await get_tree().create_timer(0.25).timeout

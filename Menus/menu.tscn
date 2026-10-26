@@ -3,7 +3,9 @@
 [ext_resource type="Script" uid="uid://c5rv84rlvqb54" path="res://Menus/menu.gd" id="1_tc4cd"]
 [ext_resource type="Texture2D" uid="uid://c7s3sylmx0vtm" path="res://Backgrounds/BackgroundFaded.png" id="2_f371u"]
 [ext_resource type="Script" uid="uid://b2o568boeejn7" path="res://Menus/background.gd" id="3_jvnec"]
+[ext_resource type="Texture2D" uid="uid://dm2sdf54o4re0" path="res://Backgrounds/0OctaneBackground.png" id="4_6ex8j"]
 [ext_resource type="FontFile" uid="uid://ci6fmn3fuqyny" path="res://Textures/LilitaOne-Regular.ttf" id="4_jvnec"]
+[ext_resource type="PackedScene" uid="uid://ignvbbxueoy4" path="res://VFX/bars.tscn" id="5_ecop0"]
 
 [node name="Menu" type="Control" unique_id=676153736]
 layout_mode = 3
@@ -18,13 +20,25 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_tc4cd")
 
-[node name="Background" type="TextureRect" parent="." unique_id=762706307]
+[node name="MainBG" type="TextureRect" parent="." unique_id=762706307]
 layout_mode = 0
 offset_right = 1352.0
 offset_bottom = 648.0
+mouse_filter = 2
 texture = ExtResource("2_f371u")
 stretch_mode = 1
 script = ExtResource("3_jvnec")
+
+[node name="GameBG" type="TextureRect" parent="." unique_id=1561651598]
+visible = false
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+mouse_filter = 2
+texture = ExtResource("4_6ex8j")
+
+[node name="Bars" parent="." unique_id=2095908880 instance=ExtResource("5_ecop0")]
+layout_mode = 1
 
 [node name="Main Menu" type="Control" parent="." unique_id=1434625969]
 anchors_preset = 0

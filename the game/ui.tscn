@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://c7w8ag17mjb15"]
 
+[ext_resource type="FontFile" uid="uid://ci6fmn3fuqyny" path="res://Textures/LilitaOne-Regular.ttf" id="1_8846n"]
+
 [node name="UI" type="Control" unique_id=2125549197]
 layout_mode = 3
 anchors_preset = 15
@@ -14,6 +16,7 @@ grow_vertical = 2
 offset_top = 513.0
 offset_right = 1154.0
 offset_bottom = 636.0
+theme_override_fonts/font = ExtResource("1_8846n")
 theme_override_font_sizes/font_size = 24
 text = "hi"
 horizontal_alignment = 1
@@ -22,6 +25,7 @@ horizontal_alignment = 1
 offset_left = 515.0
 offset_right = 1139.9998
 offset_bottom = 109.0
+theme_override_fonts/font = ExtResource("1_8846n")
 theme_override_font_sizes/font_size = 24
 text = "Lives Left: 5
 Notes left: 670

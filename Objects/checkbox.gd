@@ -1,25 +1,31 @@
 extends Area2D
 
 @onready var supplementarytext = preload("res://Objects/supplementary_text.tscn")
+@onready var glowring = preload("res://VFX/glow_ring.tscn")
 @onready var is_mouse_hovering: bool = false
 
 
 # Called when the node enters the scene tree for the first time.
-func _on_mouse_entered() -> void:
-	is_mouse_hovering = true
-	
-func _on_mouse_exited() -> void:
-	is_mouse_hovering = false
+#func _on_mouse_entered() -> void:
+	#print("mouse entered")
+	#is_mouse_hovering = true
+	#
+#func _on_mouse_exited() -> void:
+	#print("mouse exited")
+	#is_mouse_hovering = false
 
-#func _ready() -> void:
-	#mouse_entered.connect(func(): is_mouse_hovering = true)
-	#mouse_exited.connect(func(): is_mouse_hovering = false)
+func _ready() -> void:
+	mouse_entered.connect(func(): is_mouse_hovering = true)
+	mouse_exited.connect(func(): is_mouse_hovering = false)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	print(is_mouse_hovering)
 	if (Input.is_action_just_pressed("Interaction") or is_in_group("inner")) and (is_mouse_hovering or is_in_group("outer")):
 		print("youre did it")
+		
+		#var glow = glowring.instantiate()
+		#get_parent().add_child(glow)
+		#glow.global_position = global_position
 		
 		if is_in_group("check"):
 			var supple = supplementarytext.instantiate()

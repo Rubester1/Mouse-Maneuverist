@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://b55hwdajas82g"]
+
+[ext_resource type="Texture2D" uid="uid://c5qmrs8ct801c" path="res://Textures/Glow.png" id="1_ih3pn"]
+[ext_resource type="Script" uid="uid://damnuxt1kgifq" path="res://VFX/glow_ring.gd" id="2_3s72v"]
+
+[node name="GlowRing" type="TextureRect" unique_id=62925220]
+anchors_preset = -1
+offset_left = -43.75
+offset_top = -43.75
+offset_right = 131.25
+offset_bottom = 131.25
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ih3pn")
+script = ExtResource("2_3s72v")

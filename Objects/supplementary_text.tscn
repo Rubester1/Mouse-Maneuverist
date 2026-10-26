@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://caamkqg8tohdn"]
 
+[ext_resource type="FontFile" uid="uid://ci6fmn3fuqyny" path="res://Textures/LilitaOne-Regular.ttf" id="1_2ma6l"]
 [ext_resource type="Script" uid="uid://cm05lmwqv57nq" path="res://Objects/supplementary_text.gd" id="1_ahcog"]
 
 [node name="Supplementary Text" type="Label" unique_id=1035913012]
@@ -8,6 +9,7 @@ offset_left = -120.0
 offset_top = -22.0
 offset_right = 120.0
 offset_bottom = 22.0
+theme_override_fonts/font = ExtResource("1_2ma6l")
 theme_override_font_sizes/font_size = 20
 text = "hello"
 horizontal_alignment = 1
