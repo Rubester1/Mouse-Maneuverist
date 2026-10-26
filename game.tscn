@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bf0s54lq3dsmf"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_mwb40"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mwb40"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_80nbo"]
+
+[node name="Node2D" type="Node2D" unique_id=993392575]
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="." unique_id=1114584600]
+position = Vector2(215, 171)
+mesh = SubResource("BoxMesh_mwb40")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="MeshInstance2D" unique_id=1629229493]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MeshInstance2D/StaticBody2D" unique_id=1234791620]
+shape = SubResource("CircleShape2D_mwb40")
+
+[node name="MeshInstance2D2" type="MeshInstance2D" parent="." unique_id=1422674329]
+position = Vector2(554, 275)
+scale = Vector2(68.75, 68.5)
+mesh = SubResource("BoxMesh_80nbo")
