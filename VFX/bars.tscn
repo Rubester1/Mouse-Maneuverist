@@ -67,12 +67,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=523961157]
 layout_mode = 0
 offset_top = -123.0
 offset_right = 1152.0
 offset_bottom = 2.0
+mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
 [node name="ColorRect2" type="ColorRect" parent="." unique_id=1667991540]
@@ -80,6 +82,7 @@ layout_mode = 0
 offset_top = 648.0
 offset_right = 1152.0
 offset_bottom = 773.0
+mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=450043696]

@@ -11,6 +11,7 @@ extends Node2D
 
 @onready var indicator = preload("res://Objects/indicator.tscn")
 @onready var supplementarytext = preload("res://Objects/supplementary_text.tscn")
+@onready var counter = preload("res://Objects/counter.tscn")
 
 @onready var MusicPlayer = $AudioStreamPlayer2D
 @onready var caption = $UI/CanvasLayer/Text
@@ -27,10 +28,19 @@ extends Node2D
 @onready var barsanimation = $Menu/Bars/AnimationPlayer
 @export var barsstate: bool = false
 
+@export var timertime = 0.0
+@export var visualtime = 0.0
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$"UI/CanvasLayer".visible = false
+	while true:
+		timertime += 0.01
+		visualtime -= 0.01
+		await get_tree().create_timer(0.01).timeout
+
+
 
 @warning_ignore("unused_parameter")
 func say(text: String):
@@ -61,16 +71,32 @@ func bars(havebars: bool):
 		barsanimation.play_backwards("enter")
 
 
-func summon(type, pos, time):
+func summon(type, pos, time, reveal:bool = false, count:int = 1):
 	notes -= 1
+	
+	var instance = type.instantiate()
+	
 	var indicate = indicator.instantiate()
 	indicate.position = pos
 	add_child(indicate)
+	indicate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
+	if reveal == false:
+		pass
+	else:
+		if instance.is_in_group("check"):
+			indicate.color = Color8(50, 150, 60, 204)
+		elif instance.is_in_group("x"):
+			indicate.color = Color8(150, 50, 50, 204)
+		elif instance.is_in_group("life"):
+			indicate.color = Color8(150, 50, 150, 204)
+		elif instance.is_in_group("points"):
+			indicate.color = Color8(50, 90, 150, 204)
+		
 	await get_tree().create_timer(1.0).timeout
 	if is_instance_valid(indicate):
 		indicate.queue_free()
 	
-	var instance = type.instantiate()
 	instance.position = pos
 	add_child(instance)
 	
@@ -81,6 +107,16 @@ func summon(type, pos, time):
 		0.0,
 		time
 	)
+	
+	instance.top_level = true
+	
+	if count > 1:
+		var countee = counter.instantiate()
+		instance.add_child(countee)
+		countee.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		countee.global_position = instance.global_position
+		countee.text = str(count)
+	
 	await tween.finished
 	
 	if is_instance_valid(instance):
@@ -136,6 +172,8 @@ func summonwithstring(string: String):
 
 func start_song(song, infinitelives):
 	
+	timertime = 0.0
+	
 	if infinitelives:
 		lives = 1000000000
 	else:
@@ -153,14 +191,14 @@ func start_song(song, infinitelives):
 		
 		await get_tree().create_timer(3.0).timeout
 		
-		summon(checkbox,Vector2(0,0),4.0)
+		summon(checkbox,Vector2(0,0),4.0, true)
 		caption.text = "Click the checkmark box before it leaves!"
 		await get_tree().create_timer(4.0).timeout
 		caption.text = ""
 		
 		await get_tree().create_timer(1.0).timeout
 		
-		summon(xbox,Vector2(0,0),4.0)
+		summon(xbox,Vector2(0,0),4.0, true)
 		caption.text = "Don't click the x box, let it disappear!"
 		await get_tree().create_timer(4.0).timeout
 		caption.text = ""
@@ -394,6 +432,7 @@ func start_song(song, infinitelives):
 			return
 		
 		#darken background
+		#nvm i made bars instead lmao
 		bars(true)
 		
 		summon(innerglowcheckbox, Vector2(200,200), 2)
@@ -511,6 +550,7 @@ func start_song(song, infinitelives):
 		summon(innerglowcheckbox, Vector2(-150,100), 1.5)
 		summon(innerglowxbox, Vector2(-150,200), 1.5)
 		await get_tree().create_timer(0.1).timeout
+		summon(pointsnote, Vector2(0,0), 1.5, true)
 		summon(innerglowxbox, Vector2(0,100), 1.5)
 		summon(innerglowcheckbox, Vector2(0,200), 1.5)
 		await get_tree().create_timer(0.1).timeout
@@ -705,6 +745,7 @@ func start_song(song, infinitelives):
 		await get_tree().create_timer(0.15).timeout
 		summon(xbox, Vector2(-100,200), 1.5)
 		await get_tree().create_timer(0.15).timeout
+		summon(life, Vector2(0,0), 1.5, true)
 		summon(checkbox, Vector2(0,200), 1.5)
 		await get_tree().create_timer(0.15).timeout
 		summon(xbox, Vector2(100,200), 1.5)
@@ -966,26 +1007,18 @@ func start_song(song, infinitelives):
 			gameover(false)
 			return
 		
-		summon(innerglowcheckbox, Vector2(-300,-300), 1)
-		summon(innerglowcheckbox, Vector2(300,-300), 1)
-		await get_tree().create_timer(0.5).timeout
-		summon(innerglowcheckbox, Vector2(-200,-300), 1)
-		summon(innerglowcheckbox, Vector2(200,-300), 0.5)
 		await get_tree().create_timer(0.25).timeout
 		summon(innerglowcheckbox, Vector2(-200,-200), 1)
 		summon(innerglowcheckbox, Vector2(200,-200), 1)
-		await get_tree().create_timer(0.25).timeout
-		summon(innerglowcheckbox, Vector2(-100,-200), 1)
-		summon(innerglowcheckbox, Vector2(100,-200), 1)
-		await get_tree().create_timer(0.25).timeout
-		summon(innerglowcheckbox, Vector2(-100,-100), 1)
-		summon(innerglowcheckbox, Vector2(100,-100), 1)
 		await get_tree().create_timer(0.25).timeout
 		summon(innerglowcheckbox, Vector2(-200,-100), 1)
 		summon(innerglowcheckbox, Vector2(200,-100), 1)
 		await get_tree().create_timer(0.25).timeout
-		summon(innerglowcheckbox, Vector2(-200,-200), 1)
-		summon(innerglowcheckbox, Vector2(200,-200), 1)
+		summon(innerglowcheckbox, Vector2(-100,-100), 1)
+		summon(innerglowcheckbox, Vector2(100,-100), 1)
+		await get_tree().create_timer(0.25).timeout
+		summon(innerglowcheckbox, Vector2(-100,-200), 1)
+		summon(innerglowcheckbox, Vector2(100,-200), 1)
 		await get_tree().create_timer(0.25).timeout
 		summon(innerglowcheckbox, Vector2(0,-200), 1)
 		await get_tree().create_timer(0.15).timeout
@@ -1004,7 +1037,9 @@ func start_song(song, infinitelives):
 		
 		summon(checkbox, Vector2(-500,0), 0.7)
 		summon(checkbox, Vector2(500,0), 0.7)
-		await get_tree().create_timer(0.3).timeout
+		await get_tree().create_timer(1.0).timeout
+		MusicPlayer.stop()
+		await get_tree().create_timer(1.0).timeout
 		
 		if lives < 1:
 			gameover(false)

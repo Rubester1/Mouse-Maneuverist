@@ -12,12 +12,17 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	if (Input.is_action_just_pressed("Interaction") or is_in_group("inner")) and (is_mouse_hovering or is_in_group("outer")):
-		print("youre didnt")
-		var supple = supplementarytext.instantiate()
-		supple.text = "No More Combo"
-		get_parent().add_child(supple)
-		supple.global_position = global_position
-		supple.global_position.x -= 125.0
-		#get_parent().say("Tricked ya!")
-		get_parent().editlives(-1)
-		queue_free()
+		if is_instance_valid($Counter):
+			$Counter.text = str(int($Counter.text)-1)
+			await mouse_exited
+				
+		else:
+			print("youre didnt")
+			var supple = supplementarytext.instantiate()
+			supple.text = "No More Combo"
+			get_parent().add_child(supple)
+			supple.global_position = global_position
+			supple.global_position.x -= 125.0
+			#get_parent().say("Tricked ya!")
+			get_parent().editlives(-1)
+			queue_free()

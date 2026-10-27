@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://id3iil2fcjw8"]
+
+[ext_resource type="FontFile" uid="uid://ci6fmn3fuqyny" path="res://Textures/LilitaOne-Regular.ttf" id="1_7f61v"]
+[ext_resource type="Script" uid="uid://c00dxdkdmuart" path="res://Objects/counter.gd" id="2_7f61v"]
+
+[node name="Counter" type="Label" unique_id=1035913012]
+show_behind_parent = true
+offset_left = -39.0
+offset_top = -22.0
+offset_right = 39.0
+offset_bottom = 24.0
+theme_override_fonts/font = ExtResource("1_7f61v")
+theme_override_font_sizes/font_size = 40
+text = "3"
+horizontal_alignment = 1
+script = ExtResource("2_7f61v")

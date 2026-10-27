@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://c5rv84rlvqb54" path="res://Menus/menu.gd" id="1_tc4cd"]
 [ext_resource type="Texture2D" uid="uid://c7s3sylmx0vtm" path="res://Backgrounds/BackgroundFaded.png" id="2_f371u"]
 [ext_resource type="Script" uid="uid://b2o568boeejn7" path="res://Menus/background.gd" id="3_jvnec"]
-[ext_resource type="Texture2D" uid="uid://dm2sdf54o4re0" path="res://Backgrounds/0OctaneBackground.png" id="4_6ex8j"]
+[ext_resource type="Texture2D" uid="uid://c3xrvxl0o3ton" path="res://Backgrounds/OctaneBackground.png" id="4_ecop0"]
 [ext_resource type="FontFile" uid="uid://ci6fmn3fuqyny" path="res://Textures/LilitaOne-Regular.ttf" id="4_jvnec"]
 [ext_resource type="PackedScene" uid="uid://ignvbbxueoy4" path="res://VFX/bars.tscn" id="5_ecop0"]
 
@@ -35,7 +35,7 @@ layout_mode = 0
 offset_right = 1152.0
 offset_bottom = 648.0
 mouse_filter = 2
-texture = ExtResource("4_6ex8j")
+texture = ExtResource("4_ecop0")
 
 [node name="Bars" parent="." unique_id=2095908880 instance=ExtResource("5_ecop0")]
 layout_mode = 1
