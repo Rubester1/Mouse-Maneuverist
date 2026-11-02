@@ -3,7 +3,7 @@ extends TextureRect
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	#top_level = true
+	top_level = true
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var tween = create_tween()
 	var tween2 = create_tween()

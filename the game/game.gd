@@ -12,6 +12,7 @@ extends Node2D
 @onready var indicator = preload("res://Objects/indicator.tscn")
 @onready var supplementarytext = preload("res://Objects/supplementary_text.tscn")
 @onready var counter = preload("res://Objects/counter.tscn")
+@onready var explosionrange = preload("res://VFX/explosion_range.tscn")
 
 @onready var MusicPlayer = $AudioStreamPlayer2D
 @onready var caption = $UI/CanvasLayer/Text
@@ -71,7 +72,7 @@ func bars(havebars: bool):
 		barsanimation.play_backwards("enter")
 
 
-func summon(type, pos, time, reveal:bool = false, count:int = 1):
+func summon(type, pos, time, reveal:bool = false, count:int = 1, exploding = false):
 	notes -= 1
 	
 	var instance = type.instantiate()
@@ -97,6 +98,12 @@ func summon(type, pos, time, reveal:bool = false, count:int = 1):
 	if is_instance_valid(indicate):
 		indicate.queue_free()
 	
+	if exploding == true:
+		var explode = explosionrange.instantiate()
+		instance.add_child(explode)
+		explode.position = instance.position
+		explode.get_node("TextureRect").mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
 	instance.position = pos
 	add_child(instance)
 	
@@ -114,26 +121,38 @@ func summon(type, pos, time, reveal:bool = false, count:int = 1):
 		var countee = counter.instantiate()
 		instance.add_child(countee)
 		countee.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		countee.global_position = instance.global_position
+		countee.position = instance.position
 		countee.text = str(count)
 	
 	await tween.finished
 	
-	if is_instance_valid(instance):
-		if instance.is_in_group("check"):
-			editlives(-1)
-			var supple = supplementarytext.instantiate()
-			supple.text = "No More Combo"
-			get_parent().add_child(supple)
-			supple.global_position = instance.global_position
-			supple.global_position.x -= 125.0
-			instance.queue_free()
-			say("Oof! Too late!")
-		elif instance.is_in_group("x"):
-			editpoints(10)
-			instance.queue_free()
-			say("Nice.")
-#hackatime isn't working oh my goodness me oh my...hackatime why would you do this to me... HACKATIME YOU ARENT TRACKING MY HOURS BRO WHYWHYWHYWHYHWHWYHWYWYHWYHWYHWYHWYHWYHWYHWYHWYHWYHYWHYWYWHYWYHHYWYWWHYWHYWHWYHWHYWHYWHYWHYWHYWHYWYHWYWHHWYHWYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	if exploding == true:
+		instance.check_mouse()
+	else:
+		if is_instance_valid(instance):
+			if instance.is_in_group("check"):
+				editlives(-1)
+				var supple = supplementarytext.instantiate()
+				supple.text = "No More Combo"
+				get_parent().add_child(supple)
+				supple.global_position = instance.global_position
+				supple.global_position.x -= 125.0
+				instance.queue_free()
+				say("Oof! Too late!")
+			elif instance.is_in_group("x"):
+				if instance.has_node("Counter"):
+					editlives(-1)
+					var supple = supplementarytext.instantiate()
+					supple.text = "No More Combo"
+					get_parent().add_child(supple)
+					supple.global_position = instance.global_position
+					supple.global_position.x -= 175.0
+					instance.queue_free()
+				else:
+					editpoints(10)
+					instance.queue_free()
+					say("Nice.")
+
 func gameover(win: bool):
 	if barsstate == true:
 		barsanimation.play_backwards("enter")
@@ -145,7 +164,7 @@ func gameover(win: bool):
 		$"Menu/Game Over/Game Over".visible = true
 		$"Menu/Game Over/You Win".visible = false
 	$"UI/CanvasLayer".visible = false
-	$"Menu/Game Over/PointsGameOver".text = "%s Points" % [points]
+	$"Menu/Game Over/PointsGameOver".text = "%s Points\n%s Lives left\n%s Time Left" % [points, lives, visualtime]
 	currentsong = "None"
 	MusicPlayer.stop()
 
@@ -185,6 +204,8 @@ func start_song(song, infinitelives):
 		MusicPlayer.play(0.0)
 		currentsong = "Octane"
 		points = 0
+		combo = 0
+		visualtime = 64.07
 		notes = 361
 		
 		#$Menu/Background.start_song("Octane")
@@ -1046,6 +1067,48 @@ func start_song(song, infinitelives):
 			return
 		
 		gameover(true)
+		
+	if song == "Rollercoaster":
+		MusicPlayer.stream = load("res://Music/Tobu Rollercoaster.mp3")
+		MusicPlayer.play(0.0)
+		currentsong = "Rollercoaster"
+		points = 0
+		combo = 0
+		visualtime = 0.0
+		notes = 999
+		
+		await get_tree().create_timer(1.0).timeout
+		
+		summon(checkbox, Vector2(-100,0), 2.5, true, 3)
+		caption.text = "Notes with the multiplication modifier show how many times you need to hit them,\nwith 1 being the standard note!"
+		
+		await get_tree().create_timer(3.7).timeout
+		
+		summon(xbox, Vector2(100,0), 2.5, true, 3)
+		caption.text = "You HAVE to bring x notes down to 1, otherwise you'll lose a life."
+		
+		await get_tree().create_timer(3.7).timeout
+		
+		summon(innerglowcheckbox, Vector2(-200,0), 2.5, true, 15)
+		summon(innerglowxbox, Vector2(200,0), 2.5, true, 3)
+		caption.text = "The hover notes work a little differently."
+		
+		await get_tree().create_timer(3.7).timeout
+		
+		summon(checkbox, Vector2(-300,0), 2.5, true, 1, true)
+		summon(xbox, Vector2(300,0), 2.5, true, 1, true)
+		caption.text = "Oh yeah, and notes can explode!\nIf you're in the range when it explodes, it will be treated as an autoclick!"
+		
+		#if lives < 1:
+			#gameover(false)
+			#return
+		#
+		#gameover(true)
+		
+		
+		
+		
+		
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -1061,21 +1124,13 @@ func _process(_delta: float) -> void:
 		summon(innerglowxbox, Vector2(randi_range(-500,500),randi_range(-500,500)), 1.0)
 		
 	
-	info.text = "Lives: %s\nPoints: %s\nCombo: %sx\nNotes left: %s" % [lives, points, combo, notes]
+	info.text = "Lives: %s\nPoints: %s\nCombo: %sx\nNotes left: %s\nTime left: %s" % [lives, points, combo, notes, visualtime]
 	
 	
 	if Input.is_action_just_pressed("Pause"):
 		pass
 		#get_tree().paused = true
 		#$"Menu/PauseMenu".visible = true
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://dixma1elpcurm"]
+
+[ext_resource type="Texture2D" uid="uid://qwbm5r7a1vv0" path="res://Textures/Explosion.png" id="1_bciv0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+size = Vector2(875, 875)
+
+[node name="Explosion Range" type="Area2D" unique_id=1347766867]
+modulate = Color(1, 1, 1, 0.32156864)
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1921721835]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -437.5
+offset_top = -437.5
+offset_right = 437.5
+offset_bottom = 437.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_bciv0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=923857826]
+shape = SubResource("RectangleShape2D_g4v7s")

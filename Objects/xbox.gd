@@ -1,6 +1,7 @@
 extends Area2D
 
 @onready var supplementarytext = preload("res://Objects/supplementary_text.tscn")
+@onready var glowring = preload("res://VFX/glow_ring.tscn")
 @onready var is_mouse_hovering: bool = false
 
 # Called when the node enters the scene tree for the first time.
@@ -8,21 +9,51 @@ func _ready() -> void:
 	mouse_entered.connect(func(): is_mouse_hovering = true)
 	mouse_exited.connect(func(): is_mouse_hovering = false)
 	top_level = true
+	if is_instance_valid($"Explosion Range"):
+		get_node("Explosion Range").mouse_entered.connect(func(): is_mouse_hovering = true)
+		get_node("Explosion Range").mouse_exited.connect(func(): is_mouse_hovering = false)
+
+func check_mouse():
+	if not is_mouse_hovering:
+		print("youre did it")
+		var supple = supplementarytext.instantiate()
+		supple.text = "KABOOM!!"
+		get_parent().add_child(supple)
+		supple.global_position = global_position
+		supple.global_position.x -= 125.0
+		
+		get_parent().editpoints(10)
+		
+	else:
+		get_parent().editlives(-1)
+		var supple = supplementarytext.instantiate()
+		supple.text = "No More Combo"
+		get_parent().get_parent().add_child(supple)
+		supple.global_position = global_position
+		supple.global_position.x -= 175.0
+	queue_free()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	if (Input.is_action_just_pressed("Interaction") or is_in_group("inner")) and (is_mouse_hovering or is_in_group("outer")):
-		if is_instance_valid($Counter):
-			$Counter.text = str(int($Counter.text)-1)
-			await mouse_exited
+	if is_instance_valid($"Explosion Range"):
+		pass
+	else:
+		if (Input.is_action_just_pressed("Interaction") or is_in_group("inner")) and (is_mouse_hovering or is_in_group("outer")):
+			if is_instance_valid($Counter):
+				$Counter.text = str(int($Counter.text)-1)
+				await mouse_exited
 				
-		else:
-			print("youre didnt")
-			var supple = supplementarytext.instantiate()
-			supple.text = "No More Combo"
-			get_parent().add_child(supple)
-			supple.global_position = global_position
-			supple.global_position.x -= 125.0
-			#get_parent().say("Tricked ya!")
-			get_parent().editlives(-1)
-			queue_free()
+				var glow = glowring.instantiate()
+				get_parent().add_child(glow)
+				glow.global_position = global_position
+				
+			else:
+				print("youre didnt")
+				var supple = supplementarytext.instantiate()
+				supple.text = "No More Combo"
+				get_parent().add_child(supple)
+				supple.global_position = global_position
+				supple.global_position.x -= 125.0
+				#get_parent().say("Tricked ya!")
+				get_parent().editlives(-1)
+				queue_free()

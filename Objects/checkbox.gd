@@ -2,6 +2,7 @@ extends Area2D
 
 @onready var supplementarytext = preload("res://Objects/supplementary_text.tscn")
 @onready var glowring = preload("res://VFX/glow_ring.tscn")
+@onready var explosionrange = preload("res://VFX/explosion_range.tscn")
 @onready var is_mouse_hovering: bool = false
 
 
@@ -18,56 +19,81 @@ func _ready() -> void:
 	mouse_entered.connect(func(): is_mouse_hovering = true)
 	mouse_exited.connect(func(): is_mouse_hovering = false)
 	top_level = true
+	if is_instance_valid($"Explosion Range"):
+		get_node("Explosion Range").mouse_entered.connect(func(): is_mouse_hovering = true)
+		get_node("Explosion Range").mouse_exited.connect(func(): is_mouse_hovering = false)
 
+func check_mouse():
+	if is_mouse_hovering:
+		print("youre did it")
+		var supple = supplementarytext.instantiate()
+		supple.text = "+0.1x Combo"
+		get_parent().add_child(supple)
+		supple.global_position = global_position
+		supple.global_position.x -= 125.0
+		
+		get_parent().editpoints(100)
+		get_parent().editcombo(0.1)
+	else:
+		get_parent().editlives(-1)
+		var supple = supplementarytext.instantiate()
+		supple.text = "No More Combo"
+		get_parent().get_parent().add_child(supple)
+		supple.global_position = global_position
+		supple.global_position.x -= 175.0
+	queue_free()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	if (Input.is_action_just_pressed("Interaction") or is_in_group("inner")) and (is_mouse_hovering or is_in_group("outer")):
-		print("youre did it")
-		if is_instance_valid($Counter):
-			$Counter.text = str(int($Counter.text)-1)
-			
-			var glow = glowring.instantiate()
-			get_parent().add_child(glow)
-			glow.global_position = global_position
-			
-			#await mouse_exited
-			
-		else:
-			
-			var glow = glowring.instantiate()
-			get_parent().add_child(glow)
-			glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			glow.global_position = global_position
-			
-			if is_in_group("check"):
-				var supple = supplementarytext.instantiate()
-				supple.text = "+0.1x Combo"
-				get_parent().add_child(supple)
-				supple.global_position = global_position
-				supple.global_position.x -= 125.0
+	if is_instance_valid($"Explosion Range"):
+		pass
+	else:
+		if (Input.is_action_just_pressed("Interaction") or is_in_group("inner")) and (is_mouse_hovering or is_in_group("outer")):
+			print("youre did it")
+			if is_instance_valid($Counter):
+				$Counter.text = str(int($Counter.text)-1)
 				
-				get_parent().editpoints(100)
-				get_parent().editcombo(0.1)
-				#get_parent().say("Nice.")
-			
-			if is_in_group("life"):
-				var supple = supplementarytext.instantiate()
-				supple.text = "+1 Life!!"
-				get_parent().add_child(supple)
-				supple.global_position = global_position
-				supple.global_position.x -= 125.0
+				var glow = glowring.instantiate()
+				get_parent().add_child(glow)
+				glow.global_position = global_position
 				
-				get_parent().editpoints(250)
-				get_parent().editlives(1)
-			
-			if is_in_group("points"):
-				var supple = supplementarytext.instantiate()
-				supple.text = "+1000 Points!!"
-				get_parent().add_child(supple)
-				supple.global_position = global_position
-				supple.global_position.x -= 125.0
+				#await mouse_exited
 				
-				get_parent().editpoints(1000)
-			
-			queue_free()
+			else:
+				
+				var glow = glowring.instantiate()
+				get_parent().add_child(glow)
+				glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+				glow.global_position = global_position
+				
+				if is_in_group("check"):
+					var supple = supplementarytext.instantiate()
+					supple.text = "+0.1x Combo"
+					get_parent().add_child(supple)
+					supple.global_position = global_position
+					supple.global_position.x -= 125.0
+					
+					get_parent().editpoints(100)
+					get_parent().editcombo(0.1)
+					#get_parent().say("Nice.")
+				
+				if is_in_group("life"):
+					var supple = supplementarytext.instantiate()
+					supple.text = "+1 Life!!"
+					get_parent().add_child(supple)
+					supple.global_position = global_position
+					supple.global_position.x -= 125.0
+					
+					get_parent().editpoints(250)
+					get_parent().editlives(1)
+				
+				if is_in_group("points"):
+					var supple = supplementarytext.instantiate()
+					supple.text = "+1000 Points!!"
+					get_parent().add_child(supple)
+					supple.global_position = global_position
+					supple.global_position.x -= 125.0
+					
+					get_parent().editpoints(1000)
+				
+				queue_free()
