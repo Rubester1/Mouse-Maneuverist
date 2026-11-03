@@ -3,6 +3,10 @@ extends Control
 var infinitelives: bool = false
 var currentsong: String = ""
 
+var octane = preload("res://Backgrounds/0OctaneBackground.png")
+var sunrise = preload("res://Backgrounds/RollecoasterSunrise.png")
+var sunset = preload("res://Backgrounds/RollecoasterSunset.png")
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
@@ -32,7 +36,8 @@ func _on_octane_pressed() -> void:
 	$"Song Config".visible = true
 	currentsong = "Octane"
 	$"Song Config/Song Name".text = currentsong
-	$"Song Config/Song Info/Info".text = "Amount of notes: 361\nLevel length: 1:04\nLevel Difficulty: Increases\nfrom 1.0 to 7.0"
+	$"Song Config/Song Info/Info".text = "Amount of notes: 361\nLevel length: 1:45\nLevel Difficulty: Increases\nfrom 1.0 to 7.0"
+	$GameBG.texture = octane
 
 func _on_rollercoaster_pressed() -> void:
 	$"Song Select".visible = false
@@ -40,6 +45,7 @@ func _on_rollercoaster_pressed() -> void:
 	currentsong = "Rollercoaster"
 	$"Song Config/Song Name".text = currentsong
 	$"Song Config/Song Info/Info".text = "Amount of notes: 444\nLevel length: 4:44\nLevel Difficulty: 4.0"
+	$GameBG.texture = sunset
 
 func _on_back_song_pressed() -> void:
 	$"Song Config".visible = false

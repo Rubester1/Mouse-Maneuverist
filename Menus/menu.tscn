@@ -29,7 +29,7 @@ texture = ExtResource("2_f371u")
 stretch_mode = 1
 script = ExtResource("3_jvnec")
 
-[node name="GameBG" type="TextureRect" parent="." unique_id=1561651598]
+[node name="GameBG" type="TextureRect" parent="." unique_id=1561651598 groups=["gamebg"]]
 visible = false
 layout_mode = 0
 offset_right = 1152.0

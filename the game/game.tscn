@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://6x1ixunel36h" path="res://the game/game.gd" id="1_s5rya"]
 [ext_resource type="PackedScene" uid="uid://c7w8ag17mjb15" path="res://the game/ui.tscn" id="2_axkb0"]
 [ext_resource type="PackedScene" uid="uid://c20s0jkeybmr7" path="res://Menus/menu.tscn" id="3_axkb0"]
+[ext_resource type="Script" uid="uid://cc4djwlh18xvv" path="res://the game/pulse.gd" id="4_u0ql0"]
 
 [node name="Game" type="Node2D" unique_id=2013995747 groups=["background"]]
 process_mode = 1
@@ -15,3 +16,20 @@ script = ExtResource("1_s5rya")
 [node name="Menu" parent="." unique_id=676153736 instance=ExtResource("3_axkb0")]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2106236937]
+
+[node name="Pulsing" type="ColorRect" parent="." unique_id=1532707303]
+modulate = Color(1, 1, 1, 0.7411765)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -324.0
+offset_right = 576.0
+offset_bottom = 324.0
+grow_horizontal = 2
+grow_vertical = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-576, -324)
+script = ExtResource("4_u0ql0")

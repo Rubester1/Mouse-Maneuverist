@@ -1,8 +1,10 @@
 extends TextureRect
 
 var currenttexture = ""
-var menu = preload("res://Backgrounds/BackgroundFaded.png")
-var octane = preload("res://Backgrounds/0OctaneBackground.png")
+@onready var menu = preload("res://Backgrounds/BackgroundFaded.png")
+@onready var octane = preload("res://Backgrounds/0OctaneBackground.png")
+@onready var sunrise = preload("res://Backgrounds/RollecoasterSunrise.png")
+@onready var sunset = preload("res://Backgrounds/RollecoasterSunset.png")
 
 
 # Called when the node enters the scene tree for the first time.

@@ -25,7 +25,7 @@ func _ready() -> void:
 
 func check_mouse():
 	if is_mouse_hovering:
-		print("youre did it")
+		#print("youre did it")
 		var supple = supplementarytext.instantiate()
 		supple.text = "+0.1x Combo"
 		get_parent().add_child(supple)
@@ -49,13 +49,15 @@ func _process(_delta: float) -> void:
 		pass
 	else:
 		if (Input.is_action_just_pressed("Interaction") or is_in_group("inner")) and (is_mouse_hovering or is_in_group("outer")):
-			print("youre did it")
+			#print("youre did it")
 			if is_instance_valid($Counter):
 				$Counter.text = str(int($Counter.text)-1)
 				
 				var glow = glowring.instantiate()
 				get_parent().add_child(glow)
 				glow.global_position = global_position
+				
+				$Counter.top_level = true
 				
 				#await mouse_exited
 				

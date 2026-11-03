@@ -13,6 +13,12 @@ extends Node2D
 @onready var supplementarytext = preload("res://Objects/supplementary_text.tscn")
 @onready var counter = preload("res://Objects/counter.tscn")
 @onready var explosionrange = preload("res://VFX/explosion_range.tscn")
+@onready var GameBG = get_node("Menu/GameBG")
+@onready var Pulse = get_node("Pulsing")
+
+@onready var bgoctane = preload("res://Backgrounds/0OctaneBackground.png")
+@onready var bgsunrise = preload("res://Backgrounds/RollecoasterSunrise.png")
+@onready var bgsunset = preload("res://Backgrounds/RollecoasterSunset.png")
 
 @onready var MusicPlayer = $AudioStreamPlayer2D
 @onready var caption = $UI/CanvasLayer/Text
@@ -29,22 +35,20 @@ extends Node2D
 @onready var barsanimation = $Menu/Bars/AnimationPlayer
 @export var barsstate: bool = false
 
-@export var timertime = 0.0
-@export var visualtime = 0.0
+@export var timertime: int = 0
+@export var visualtime: int = 0
 
+@warning_ignore("unused_parameter")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$"UI/CanvasLayer".visible = false
 	while true:
-		timertime += 0.01
-		visualtime -= 0.01
-		await get_tree().create_timer(0.01).timeout
+		timertime += 1
+		visualtime -= 1
+		await get_tree().create_timer(1).timeout
 
-
-
-@warning_ignore("unused_parameter")
-func say(text: String):
+func say(_text: String):
 	#caption.text = text
 	#await get_tree().create_timer(0.5).timeout
 	#caption.text = ""
@@ -52,17 +56,17 @@ func say(text: String):
 
 func editcombo(value):
 	combo += value
-	print(combo)
+	#print(combo)
 
 func editpoints(value):
 	points += value * combo
-	print(points)
+	#print(points)
 
 func editlives(value):
 	if value < 0:
 		combo = 1
 	lives += value
-	print(lives)
+	#print(lives)
 
 func bars(havebars: bool):
 	barsstate = havebars
@@ -71,8 +75,26 @@ func bars(havebars: bool):
 	else:
 		barsanimation.play_backwards("enter")
 
+func gameover(win: bool):
+	if barsstate == true:
+		barsanimation.play_backwards("enter")
+	$"Menu/Game Over".visible = true
+	if win:
+		$"Menu/Game Over/Game Over".visible = false
+		$"Menu/Game Over/You Win".visible = true
+	else:
+		$"Menu/Game Over/Game Over".visible = true
+		$"Menu/Game Over/You Win".visible = false
+	$"UI/CanvasLayer".visible = false
+	$"Menu/Game Over/PointsGameOver".text = "%s Points\n%s Lives left\n%s Seconds Left" % [points, lives, visualtime]
+	currentsong = "None"
+	MusicPlayer.stop()
 
-func summon(type, pos, time, reveal:bool = false, count:int = 1, exploding = false):
+func summon(type, pos, time, reveal:bool = true, count:int = 1, exploding = false):
+	if lives < 1:
+			gameover(false)
+			return
+	
 	notes -= 1
 	
 	var instance = type.instantiate()
@@ -86,13 +108,13 @@ func summon(type, pos, time, reveal:bool = false, count:int = 1, exploding = fal
 		pass
 	else:
 		if instance.is_in_group("check"):
-			indicate.color = Color8(50, 150, 60, 204)
+			indicate.color = Color8(50, 150, 60)
 		elif instance.is_in_group("x"):
-			indicate.color = Color8(150, 50, 50, 204)
+			indicate.color = Color8(150, 50, 50)
 		elif instance.is_in_group("life"):
-			indicate.color = Color8(150, 50, 150, 204)
+			indicate.color = Color8(150, 50, 150)
 		elif instance.is_in_group("points"):
-			indicate.color = Color8(50, 90, 150, 204)
+			indicate.color = Color8(50, 90, 150)
 		
 	await get_tree().create_timer(1.0).timeout
 	if is_instance_valid(indicate):
@@ -115,7 +137,7 @@ func summon(type, pos, time, reveal:bool = false, count:int = 1, exploding = fal
 		time
 	)
 	
-	instance.top_level = true
+	#instance.top_level = true
 	
 	if count > 1:
 		var countee = counter.instantiate()
@@ -153,21 +175,6 @@ func summon(type, pos, time, reveal:bool = false, count:int = 1, exploding = fal
 					instance.queue_free()
 					say("Nice.")
 
-func gameover(win: bool):
-	if barsstate == true:
-		barsanimation.play_backwards("enter")
-	$"Menu/Game Over".visible = true
-	if win:
-		$"Menu/Game Over/Game Over".visible = false
-		$"Menu/Game Over/You Win".visible = true
-	else:
-		$"Menu/Game Over/Game Over".visible = true
-		$"Menu/Game Over/You Win".visible = false
-	$"UI/CanvasLayer".visible = false
-	$"Menu/Game Over/PointsGameOver".text = "%s Points\n%s Lives left\n%s Time Left" % [points, lives, visualtime]
-	currentsong = "None"
-	MusicPlayer.stop()
-
 func findnote(string: String):
 	if string == "cbx":
 		return checkbox
@@ -191,7 +198,7 @@ func summonwithstring(string: String):
 
 func start_song(song, infinitelives):
 	
-	timertime = 0.0
+	timertime = 0
 	
 	if infinitelives:
 		lives = 1000000000
@@ -205,10 +212,12 @@ func start_song(song, infinitelives):
 		currentsong = "Octane"
 		points = 0
 		combo = 0
-		visualtime = 64.07
+		visualtime = 105
 		notes = 361
 		
 		#$Menu/Background.start_song("Octane")
+		
+		Pulse.pulse(2.5, 1.0, Color(0,0,0))
 		
 		await get_tree().create_timer(3.0).timeout
 		
@@ -349,30 +358,30 @@ func start_song(song, infinitelives):
 			gameover(false)
 			return
 		
-		summon(checkbox, Vector2(-300, 200), 1.0)
+		summon(checkbox, Vector2(-300, 200), 1.0, false)
 		await get_tree().create_timer(0.5).timeout
-		summon(innerglowcheckbox, Vector2(-350, 100), 1.0)
+		summon(innerglowcheckbox, Vector2(-350, 100), 1.0, false)
 		await get_tree().create_timer(0.5).timeout
-		summon(checkbox, Vector2(-380, 0), 1.0)
+		summon(checkbox, Vector2(-380, 0), 1.0, false)
 		await get_tree().create_timer(0.5).timeout
-		summon(xbox, Vector2(-350, -100), 1.0)
+		summon(xbox, Vector2(-350, -100), 1.0, false)
 		await get_tree().create_timer(0.5).timeout
-		summon(innerglowcheckbox, Vector2(-300, -200), 1.0)
+		summon(innerglowcheckbox, Vector2(-300, -200), 1.0, false)
 		await get_tree().create_timer(0.5).timeout
 		
 		if lives < 1:
 			gameover(false)
 			return
 		
-		summon(innerglowxbox, Vector2(300, 200), 1.0)
+		summon(innerglowxbox, Vector2(300, 200), 1.0, false)
 		await get_tree().create_timer(0.5).timeout
-		summon(innerglowcheckbox, Vector2(350, 100), 1.0)
+		summon(innerglowcheckbox, Vector2(350, 100), 1.0, false)
 		await get_tree().create_timer(0.5).timeout
-		summon(innerglowxbox, Vector2(380, 0), 1.0)
+		summon(innerglowxbox, Vector2(380, 0), 1.0, false)
 		await get_tree().create_timer(0.5).timeout
-		summon(innerglowcheckbox, Vector2(350, -100), 1.0)
+		summon(innerglowcheckbox, Vector2(350, -100), 1.0, false)
 		await get_tree().create_timer(0.5).timeout
-		summon(checkbox, Vector2(300, -200), 1.0)
+		summon(checkbox, Vector2(300, -200), 1.0, false)
 		await get_tree().create_timer(0.5).timeout
 		
 		
@@ -388,64 +397,64 @@ func start_song(song, infinitelives):
 		await get_tree().create_timer(2.0).timeout
 		caption.text = ""
 		
-		summon(checkbox, Vector2(300,-200), 2.0)
-		summon(innerglowxbox, Vector2(400,-200), 2.0)
-		summon(innerglowxbox, Vector2(300,-100), 2.0)
-		summon(innerglowxbox, Vector2(400,-100), 2.0)
+		summon(checkbox, Vector2(300,-200), 2.0, false)
+		summon(innerglowxbox, Vector2(400,-200), 2.0, false)
+		summon(innerglowxbox, Vector2(300,-100), 2.0, false)
+		summon(innerglowxbox, Vector2(400,-100), 2.0, false)
 		await get_tree().create_timer(2.0).timeout
 		
 		if lives < 1:
 			gameover(false)
 			return
 		
-		summon(innerglowxbox, Vector2(-300,200), 2.0)
-		summon(checkbox, Vector2(-400,200), 2.0)
-		summon(innerglowxbox, Vector2(-300,100), 2.0)
-		summon(innerglowxbox, Vector2(-400,100), 2.0)
+		summon(innerglowxbox, Vector2(-300,200), 2.0, false)
+		summon(checkbox, Vector2(-400,200), 2.0, false)
+		summon(innerglowxbox, Vector2(-300,100), 2.0, false)
+		summon(innerglowxbox, Vector2(-400,100), 2.0, false)
 		await get_tree().create_timer(2.0).timeout
 		
 		if lives < 1:
 			gameover(false)
 			return
 		
-		summon(innerglowxbox, Vector2(-100,-200), 2.0)
-		summon(innerglowxbox, Vector2(-0,-200), 2.0)
-		summon(checkbox, Vector2(100,-200), 2.0)
-		summon(innerglowxbox, Vector2(-100,-100), 2.0)
-		summon(innerglowxbox, Vector2(0,-100), 2.0)
-		summon(innerglowxbox, Vector2(100,-100), 2.0)
+		summon(innerglowxbox, Vector2(-100,-200), 2.0, false)
+		summon(innerglowxbox, Vector2(-0,-200), 2.0, false)
+		summon(checkbox, Vector2(100,-200), 2.0, false)
+		summon(innerglowxbox, Vector2(-100,-100), 2.0, false)
+		summon(innerglowxbox, Vector2(0,-100), 2.0, false)
+		summon(innerglowxbox, Vector2(100,-100), 2.0, false)
 		await get_tree().create_timer(2.0).timeout
 		
 		if lives < 1:
 			gameover(false)
 			return
 		
-		summon(innerglowxbox, Vector2(300,200), 2.0)
-		summon(innerglowxbox, Vector2(400,200), 2.0)
-		summon(innerglowxbox, Vector2(300,100), 2.0)
-		summon(checkbox, Vector2(400,100), 2.0)
+		summon(innerglowxbox, Vector2(300,200), 2.0, false)
+		summon(innerglowxbox, Vector2(400,200), 2.0, false)
+		summon(innerglowxbox, Vector2(300,100), 2.0, false)
+		summon(checkbox, Vector2(400,100), 2.0, false)
 		await get_tree().create_timer(2.0).timeout
 		
 		if lives < 1:
 			gameover(false)
 			return
 		
-		summon(innerglowxbox, Vector2(-300,-200), 2.0)
-		summon(innerglowxbox, Vector2(-400,-200), 2.0)
-		summon(innerglowxbox, Vector2(-300,-100), 2.0)
-		summon(checkbox, Vector2(-400,-100), 2.0)
+		summon(innerglowxbox, Vector2(-300,-200), 2.0, false)
+		summon(innerglowxbox, Vector2(-400,-200), 2.0, false)
+		summon(innerglowxbox, Vector2(-300,-100), 2.0, false)
+		summon(checkbox, Vector2(-400,-100), 2.0, false)
 		await get_tree().create_timer(2.0).timeout
 		
 		if lives < 1:
 			gameover(false)
 			return
 		
-		summon(innerglowxbox, Vector2(-100,200), 2.0)
-		summon(checkbox, Vector2(0,200), 2.0)
-		summon(innerglowxbox, Vector2(100,200), 2.0)
-		summon(innerglowxbox, Vector2(-100,100), 2.0)
-		summon(innerglowxbox, Vector2(0,100), 2.0)
-		summon(innerglowxbox, Vector2(100,100), 2.0)
+		summon(innerglowxbox, Vector2(-100,200), 2.0, false)
+		summon(checkbox, Vector2(0,200), 2.0, false)
+		summon(innerglowxbox, Vector2(100,200), 2.0, false)
+		summon(innerglowxbox, Vector2(-100,100), 2.0, false)
+		summon(innerglowxbox, Vector2(0,100), 2.0, false)
+		summon(innerglowxbox, Vector2(100,100), 2.0, false)
 		await get_tree().create_timer(3.3).timeout
 		
 		if lives < 1:
@@ -944,39 +953,39 @@ func start_song(song, infinitelives):
 		await get_tree().create_timer(0.25).timeout
 		summon(checkbox, Vector2(-100,-200), 0.5)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(-200,-200), 0.5)
+		summon(checkbox, Vector2(-200,-200), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(-200,-100), 0.5)
+		summon(checkbox, Vector2(-200,-100), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(xbox, Vector2(-200,0), 0.5)
+		summon(xbox, Vector2(-200,0), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(-200,100), 0.5)
+		summon(checkbox, Vector2(-200,100), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(-200,200), 0.5)
+		summon(checkbox, Vector2(-200,200), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(-100,200), 0.5)
+		summon(checkbox, Vector2(-100,200), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(0,200), 0.5)
+		summon(checkbox, Vector2(0,200), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(xbox, Vector2(100,200), 0.5)
+		summon(xbox, Vector2(100,200), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(200,200), 0.5)
+		summon(checkbox, Vector2(200,200), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(xbox, Vector2(200,100), 0.5)
+		summon(xbox, Vector2(200,100), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(200,0), 0.5)
+		summon(checkbox, Vector2(200,0), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(200,-100), 0.5)
+		summon(checkbox, Vector2(200,-100), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(200,-200), 0.5)
+		summon(checkbox, Vector2(200,-200), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(100,-200), 0.5)
+		summon(checkbox, Vector2(100,-200), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(0,-200), 0.5)
+		summon(checkbox, Vector2(0,-200), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(0,-100), 0.5)
+		summon(checkbox, Vector2(0,-100), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(0,0), 0.5)
+		summon(checkbox, Vector2(0,0), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
 		
 		if lives < 1:
@@ -984,44 +993,44 @@ func start_song(song, infinitelives):
 			return
 		
 		
-		summon(checkbox, Vector2(-100,0), 0.5)
-		summon(xbox, Vector2(100,0), 0.5)
+		summon(checkbox, Vector2(-100,0), 0.5, false)
+		summon(xbox, Vector2(100,0), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(-200,0), 0.5)
-		summon(xbox, Vector2(200,0), 0.5)
+		summon(checkbox, Vector2(-200,0), 0.5, false)
+		summon(xbox, Vector2(200,0), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(-300,0), 0.5)
-		summon(xbox, Vector2(300,0), 0.5)
+		summon(checkbox, Vector2(-300,0), 0.5, false)
+		summon(xbox, Vector2(300,0), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(-300,100), 0.5)
-		summon(xbox, Vector2(300,100), 0.5)
+		summon(checkbox, Vector2(-300,100), 0.5, false)
+		summon(xbox, Vector2(300,100), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(xbox, Vector2(-300,200), 0.5)
-		summon(checkbox, Vector2(300,200), 3)
+		summon(xbox, Vector2(-300,200), 0.5, false)
+		summon(checkbox, Vector2(300,200), 3, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(-200,200), 0.5)
-		summon(xbox, Vector2(200,200), 0.5)
+		summon(checkbox, Vector2(-200,200), 0.5, false)
+		summon(xbox, Vector2(200,200), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(-100,200), 0.5)
-		summon(xbox, Vector2(100,200), 0.5)
+		summon(checkbox, Vector2(-100,200), 0.5, false)
+		summon(xbox, Vector2(100,200), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(checkbox, Vector2(-100,100), 0.5)
-		summon(xbox, Vector2(100,100), 0.5)
+		summon(checkbox, Vector2(-100,100), 0.5, false)
+		summon(xbox, Vector2(100,100), 0.5, false)
 		await get_tree().create_timer(1).timeout
-		summon(xbox, Vector2(-100,0), 1)
-		summon(checkbox, Vector2(100,0), 1)
+		summon(xbox, Vector2(-100,0), 1, false)
+		summon(checkbox, Vector2(100,0), 1, false)
 		await get_tree().create_timer(0.5).timeout
-		summon(xbox, Vector2(-100,-100), 0.5)
-		summon(checkbox, Vector2(100,-100), 0.5)
+		summon(xbox, Vector2(-100,-100), 0.5, false)
+		summon(checkbox, Vector2(100,-100), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(xbox, Vector2(-100,-200), 0.5)
-		summon(checkbox, Vector2(100,-200), 0.5)
+		summon(xbox, Vector2(-100,-200), 0.5, false)
+		summon(checkbox, Vector2(100,-200), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(xbox, Vector2(-200,-200), 0.5)
-		summon(checkbox, Vector2(200,-200), 0.5)
+		summon(xbox, Vector2(-200,-200), 0.5, false)
+		summon(checkbox, Vector2(200,-200), 0.5, false)
 		await get_tree().create_timer(0.25).timeout
-		summon(xbox, Vector2(-300,-200), 0.5)
-		summon(checkbox, Vector2(300,-200), 0.5)
+		summon(xbox, Vector2(-300,-200), 0.5, false)
+		summon(checkbox, Vector2(300,-200), 0.5, false)
 		await get_tree().create_timer(1).timeout
 		
 		if lives < 1:
@@ -1074,37 +1083,237 @@ func start_song(song, infinitelives):
 		currentsong = "Rollercoaster"
 		points = 0
 		combo = 0
-		visualtime = 0.0
+		visualtime = 78
 		notes = 999
 		
-		await get_tree().create_timer(1.0).timeout
+		Pulse.pulse(2.5, 1.0)
 		
-		summon(checkbox, Vector2(-100,0), 2.5, true, 3)
+		await get_tree().create_timer(1.875).timeout
+		
+		summon(checkbox, Vector2(-100,0), 1.875, true, 3)
 		caption.text = "Notes with the multiplication modifier show how many times you need to hit them,\nwith 1 being the standard note!"
 		
-		await get_tree().create_timer(3.7).timeout
+		await get_tree().create_timer(1.875).timeout
 		
-		summon(xbox, Vector2(100,0), 2.5, true, 3)
+		summon(xbox, Vector2(100,0), 1.875, true, 3)
 		caption.text = "You HAVE to bring x notes down to 1, otherwise you'll lose a life."
 		
-		await get_tree().create_timer(3.7).timeout
+		await get_tree().create_timer(1.875).timeout
 		
-		summon(innerglowcheckbox, Vector2(-200,0), 2.5, true, 15)
-		summon(innerglowxbox, Vector2(200,0), 2.5, true, 3)
+		summon(innerglowcheckbox, Vector2(-200,0), 3.75, true, 15)
+		summon(innerglowxbox, Vector2(200,0), 3.75, true, 3)
 		caption.text = "The hover notes work a little differently."
 		
-		await get_tree().create_timer(3.7).timeout
+		await get_tree().create_timer(3.75).timeout
 		
 		summon(checkbox, Vector2(-300,0), 2.5, true, 1, true)
 		summon(xbox, Vector2(300,0), 2.5, true, 1, true)
 		caption.text = "Oh yeah, and notes can explode!\nIf you're in the range when it explodes, it will be treated as an autoclick!"
 		
-		#if lives < 1:
-			#gameover(false)
-			#return
-		#
-		#gameover(true)
+		await get_tree().create_timer(3.75).timeout
 		
+		
+		if lives < 1:
+			return
+		
+		summon(xbox, Vector2(0,0), 2.0, true, 1, true)
+		summon(checkbox, Vector2(0, -150), 2.0, true)
+		summon(checkbox, Vector2(0, 150), 2.0, true)
+		summon(checkbox, Vector2(150, 0), 2.0, true)
+		summon(checkbox, Vector2(-150, 0), 2.0, true)
+		
+		await get_tree().create_timer(1.875).timeout
+		caption.text = ""
+		
+		if lives < 1:
+			return
+		
+		summon(innerglowcheckbox, Vector2(-300, 100), 2.0, true, 9)
+		summon(innerglowcheckbox, Vector2(-350, 0), 2.0, true, 9)
+		summon(innerglowcheckbox, Vector2(-300, -100), 2.0, true, 9)
+		
+		await get_tree().create_timer(1.875).timeout
+		
+		if lives < 1:
+			return
+		
+		summon(innerglowcheckbox, Vector2(300, 100), 2.0, true, 9)
+		summon(innerglowcheckbox, Vector2(350, 0), 2.0, true, 9)
+		summon(innerglowcheckbox, Vector2(300, -100), 2.0, true, 9)
+		
+		await get_tree().create_timer(1.875).timeout
+		
+		if lives < 1:
+			return
+		
+		summon(checkbox, Vector2(0,0), 1.875, true, 1, true)
+		summon(checkbox, Vector2(-350,0), 1.875, true, 3)
+		summon(checkbox, Vector2(350,0), 1.875, true, 3)
+		
+		await get_tree().create_timer(3.75).timeout
+		
+		if lives < 1:
+			return
+		
+		summon(checkbox, Vector2(350,0), 1.875, true, 3)
+		summon(checkbox, Vector2(-350,0), 1.875, true, 3)
+		summon(innerglowcheckbox, Vector2(0,0), 2.5, true, 20)
+		
+		summon(xbox, Vector2(-200,0), 2.5, true, 1, true)
+		summon(xbox, Vector2(200,0), 2.5, true, 1, true)
+		
+		await get_tree().create_timer(3.75).timeout
+		
+		if lives < 1:
+			return
+		
+		summon(innerglowcheckbox, Vector2(0,0), 3.75, true, 50)
+		summon(checkbox, Vector2(-350,0), 3.75, true, 5)
+		summon(checkbox, Vector2(350,0), 3.75, true, 5)
+		
+		await get_tree().create_timer(3.75).timeout
+		
+		if lives < 1:
+			return
+		
+		bars(true)
+		
+		summon(checkbox, Vector2(-400,-200), 2.0, false, 3)
+		await get_tree().create_timer(0.1375).timeout
+		summon(checkbox, Vector2(400,-200), 2.5, false, 3)
+		await get_tree().create_timer(0.2).timeout
+		summon(checkbox, Vector2(-400,200), 3.0, false, 2)
+		await get_tree().create_timer(0.2).timeout
+		summon(checkbox, Vector2(400,200), 3.5, false, 2)
+		await get_tree().create_timer(0.4).timeout
+		await get_tree().create_timer(0.9375).timeout
+		await get_tree().create_timer(0.9375).timeout
+		await get_tree().create_timer(0.9375).timeout
+		
+		
+		#1
+		summon(xbox, Vector2(0,-200), 2.0, false, 1, true)
+		summon(xbox, Vector2(-400,-200), 2.0, false, 1, true)
+		summon(xbox, Vector2(-400,200), 2.0, false, 1, true)
+		summon(xbox, Vector2(400,-200), 2.0, false, 1, true)
+		summon(xbox, Vector2(400,200), 2.0, false, 1, true)
+		summon(innerglowcheckbox, Vector2(200,0), 1.0, false)
+		summon(innerglowcheckbox, Vector2(100,100), 1.0, false)
+		await get_tree().create_timer(1.875).timeout
+		
+		if lives < 1:
+			return
+		
+		summon(xbox, Vector2(0,200), 2.0, false, 1, true)
+		#2
+		summon(xbox, Vector2(-400,-200), 2.0, false, 1, true)
+		summon(xbox, Vector2(-400,200), 2.0, false, 1, true)
+		summon(xbox, Vector2(400,-200), 2.0, false, 1, true)
+		summon(xbox, Vector2(400,200), 2.0, false, 1, true)
+		summon(innerglowcheckbox, Vector2(-200,0), 1.0, false)
+		summon(innerglowcheckbox, Vector2(-100,200), 1.0, false)
+		await get_tree().create_timer(1.875).timeout
+		
+		if lives < 1:
+			return
+		
+		summon(xbox, Vector2(0,200), 2.0, false, 1, true)
+		summon(xbox, Vector2(0,-200), 2.0, false, 1, true)
+		#3
+		summon(xbox, Vector2(-400,200), 2.0, false, 1, true)
+		summon(xbox, Vector2(400,-200), 2.0, false, 1, true)
+		summon(xbox, Vector2(400,200), 2.0, false, 1, true)
+		summon(innerglowcheckbox, Vector2(-300,200), 1.0, false)
+		summon(innerglowcheckbox, Vector2(100,-200), 1.0, false)
+		await get_tree().create_timer(1.875).timeout
+		
+		if lives < 1:
+			return
+		
+		summon(xbox, Vector2(0,200), 2.0, false, 1, true)
+		summon(xbox, Vector2(0,-200), 2.0, false, 1, true)
+		summon(xbox, Vector2(-400,-200), 2.0, false, 1, true)
+		#4
+		summon(xbox, Vector2(400,-200), 2.0, false, 1, true)
+		summon(xbox, Vector2(400,200), 2.0, false, 1, true)
+		summon(innerglowcheckbox, Vector2(200,0), 1.0, false)
+		summon(innerglowcheckbox, Vector2(200,300), 1.0, false)
+		await get_tree().create_timer(1.875).timeout
+		
+		if lives < 1:
+			return
+		
+		summon(xbox, Vector2(0,200), 2.0, false, 1, true)
+		summon(xbox, Vector2(0,-200), 2.0, false, 1, true)
+		summon(xbox, Vector2(-400,-200), 2.0, false, 1, true)
+		summon(xbox, Vector2(-400,200), 2.0, false, 1, true)
+		#5
+		summon(xbox, Vector2(400,200), 2.0, false, 1, true)
+		summon(innerglowcheckbox, Vector2(-100,0), 1.0, false)
+		summon(innerglowcheckbox, Vector2(0,-100), 1.0, false)
+		await get_tree().create_timer(1.875).timeout
+		
+		if lives < 1:
+			return
+		
+		summon(xbox, Vector2(0,200), 2.0, false, 1, true)
+		summon(xbox, Vector2(0,-200), 2.0, false, 1, true)
+		summon(xbox, Vector2(-400,-200), 2.0, false, 1, true)
+		summon(xbox, Vector2(-400,200), 2.0, false, 1, true)
+		summon(xbox, Vector2(400,-200), 2.0, false, 1, true)
+		#6
+		summon(innerglowcheckbox, Vector2(-200,300), 1.0, false)
+		summon(innerglowcheckbox, Vector2(100,-300), 1.0, false)
+		
+		if lives < 1:
+			return
+		
+		await get_tree().create_timer(0.9375).timeout
+		
+		if lives < 1:
+			return
+		
+		#await get_tree().create_timer(0.9375).timeout
+		#Pulse.pulse(0.75, 0.25)
+		await get_tree().create_timer(0.9375).timeout
+		
+		if lives < 1:
+			return
+		
+		bars(false)
+		await get_tree().create_timer(0.9375).timeout
+		
+		if lives < 1:
+			return
+		
+		print("4")
+		Pulse.pulse(2.5, 1.0)
+		GameBG.texture = bgsunrise
+		
+		Pulse.pulse(0.75, 0.25)
+		await get_tree().create_timer(0.9375).timeout
+		print("5")
+		Pulse.pulse(0.75, 0.25)
+		await get_tree().create_timer(0.9375).timeout
+		Pulse.pulse(0.75, 0.25)
+		await get_tree().create_timer(0.9375).timeout
+		Pulse.pulse(0.75, 0.25)
+		await get_tree().create_timer(0.9375).timeout
+		Pulse.pulse(0.75, 0.25)
+		await get_tree().create_timer(0.9375).timeout
+		Pulse.pulse(0.75, 0.25)
+		await get_tree().create_timer(0.9375).timeout
+		Pulse.pulse(0.75, 0.25)
+		await get_tree().create_timer(0.9375).timeout
+		Pulse.pulse(0.75, 0.25)
+		await get_tree().create_timer(0.9375).timeout
+		Pulse.pulse(0.75, 0.25)
+		await get_tree().create_timer(0.9375).timeout
+		Pulse.pulse(0.75, 0.25)
+		await get_tree().create_timer(0.9375).timeout
+		Pulse.pulse(0.75, 0.25)
+		await get_tree().create_timer(0.9375).timeout
+		caption.text = "This song is unfinished! You can enjoy the rest of the music, though"
 		
 		
 		
@@ -1114,24 +1323,23 @@ func start_song(song, infinitelives):
 func _process(_delta: float) -> void:
 	songposition = MusicPlayer.get_playback_position()
 	
-	if Input.is_action_just_pressed("Spawn Checkbox"):
-		summon(checkbox, Vector2(randi_range(-500,500),randi_range(-500,500)), 1.0)
-	if Input.is_action_just_pressed("Spawn Xbox"):
-		summon(xbox, Vector2(randi_range(-500,500),randi_range(-500,500)), 1.0)
-	if Input.is_action_just_pressed("Spawn Inner Glow Checkbox"):
-		summon(innerglowcheckbox, Vector2(randi_range(-500,500),randi_range(-500,500)), 1.0)
-	if Input.is_action_just_pressed("Spawn Inner Glow Xbox"):
-		summon(innerglowxbox, Vector2(randi_range(-500,500),randi_range(-500,500)), 1.0)
+	#if Input.is_action_just_pressed("Spawn Checkbox"):
+		#summon(checkbox, Vector2(randi_range(-500,500),randi_range(-500,500)), 1.0)
+	#if Input.is_action_just_pressed("Spawn Xbox"):
+		#summon(xbox, Vector2(randi_range(-500,500),randi_range(-500,500)), 1.0)
+	#if Input.is_action_just_pressed("Spawn Inner Glow Checkbox"):
+		#summon(innerglowcheckbox, Vector2(randi_range(-500,500),randi_range(-500,500)), 1.0)
+	#if Input.is_action_just_pressed("Spawn Inner Glow Xbox"):
+		#summon(innerglowxbox, Vector2(randi_range(-500,500),randi_range(-500,500)), 1.0)
 		
 	
-	info.text = "Lives: %s\nPoints: %s\nCombo: %sx\nNotes left: %s\nTime left: %s" % [lives, points, combo, notes, visualtime]
+	info.text = "Lives: %s\nPoints: %s\nCombo: %sx\nNotes left: %s\nSeconds left: %s" % [lives, points, combo, notes, visualtime]
 	
 	
 	if Input.is_action_just_pressed("Pause"):
 		pass
 		#get_tree().paused = true
-		#$"Menu/PauseMenu".visible = true
-	
+		#$"Menu/PauseMenu".visible = true	
 	
 	
 	

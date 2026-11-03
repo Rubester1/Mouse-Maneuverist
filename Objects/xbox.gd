@@ -15,7 +15,7 @@ func _ready() -> void:
 
 func check_mouse():
 	if not is_mouse_hovering:
-		print("youre did it")
+		#print("youre did it")
 		var supple = supplementarytext.instantiate()
 		supple.text = "KABOOM!!"
 		get_parent().add_child(supple)
@@ -48,7 +48,7 @@ func _process(_delta: float) -> void:
 				glow.global_position = global_position
 				
 			else:
-				print("youre didnt")
+				#print("youre didnt")
 				var supple = supplementarytext.instantiate()
 				supple.text = "No More Combo"
 				get_parent().add_child(supple)
